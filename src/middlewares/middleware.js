@@ -1,19 +1,22 @@
-import { allowedOrigins } from '../config/config.js'
+import { allowedOrigins } from '../config/config.js';
 
 export const validateCORS = (req, res, next) => {
   try {
-    const { origin } = req.headers
-    console.log(origin)
+    const { origin } = req.headers;
+    console.log('Origin:', origin);
 
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin || '*')
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-      res.setHeader('Access-Control-Allow-Headers', 'content-type, authorization')
-      next()
+   
+    const allowedOriginsArray = allowedOrigins.split(',');
+
+    if (allowedOriginsArray.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin || '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'content-type, authorization');
+      next();
     } else {
-      res.status(403).json({ message: 'No permitido por CORS' })
+      res.status(403).json({ message: 'No permitido por CORS' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-}
+};
