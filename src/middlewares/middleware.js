@@ -6,7 +6,7 @@ export const validateCORS = (req, res, next) => {
     console.log('Origin:', origin);
 
    
-    const allowedOriginsArray = allowedOrigins.split(',');
+  
 
     if (allowedOriginsArray.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin || '*');

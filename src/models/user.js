@@ -85,6 +85,20 @@ class Usuario {
       throw new Error('Error al eliminar el usuario: ' + error.message);
     }
   }
+  static async create(data) {
+    const { correo, contraseña } = data;
+
+    if (!correo || !contraseña) {
+      throw new Error('Correo or contraseña is missing');
+    }
+
+    const [result] = await pool.execute(
+      'INSERT INTO usuario (correo, contraseña) VALUES (?, ?)',
+      [correo, contraseña]
+    );
+    return { id: result.insertId, correo, contraseña };
+  }
+
   
 }
 

@@ -4,6 +4,8 @@ import { validateJWT } from '../middlewares/auth.middleware.js'
 
 const router = Router()
 
+
+router.post('/register', AuthController.register);
 router.post('/login', AuthController.login)
 router.get('/me', validateJWT, AuthController.me)
 

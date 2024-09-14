@@ -4,6 +4,38 @@ import { SECRET_KEY } from '../config/config.js'
 import bcrypt from 'bcrypt';
 
 class AuthController {
+
+
+  static async register(req, res) {
+    const { correo, contraseña } = req.body;
+
+    try {
+     
+      const usuarioExistente = await Usuario.findOne('correo', correo);
+      if (usuarioExistente) {
+        return res.status(400).json({ message: 'El usuario ya existe' });
+      }
+
+     
+      const hashedPassword = await bcrypt.hash(contraseña, 10);
+
+      
+      const nuevoUsuario = await Usuario.create({
+        correo,
+        contraseña: hashedPassword, // Almacenar la contraseña hasheada
+      });
+
+     
+      const token = jwt.sign({ userId: nuevoUsuario.id }, SECRET_KEY, { expiresIn: '1h' });
+
+      res.status(201).json({ message: 'Usuario registrado exitosamente', token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al registrar el usuario' });
+    }
+  }
+
+
   static async login(req, res) {
     const { correo, contraseña } = req.body
 
