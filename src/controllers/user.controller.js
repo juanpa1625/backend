@@ -127,6 +127,20 @@ class UserController {
       res.status(500).json({ message: 'Error al actualizar el usuario' })
     }
   }
+
+  static async getUserProfile(req, res) {
+    try {
+      const user = req.user; // Usuario autenticado almacenado en req.user
+      if (!user) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener el perfil del usuario' });
+    }
+  }
+
 }
 
 export default UserController

@@ -8,7 +8,7 @@ export const validateCORS = (req, res, next) => {
    
   
 
-    if (allowedOriginsArray.includes(origin)) {
+    if (allowedOrigins.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin || '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'content-type, authorization');
