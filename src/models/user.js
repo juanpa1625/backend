@@ -99,7 +99,6 @@ class Usuario {
     return { id: result.insertId, correo, contraseña };
   }
 
-  
 }
 
 export default Usuario
