@@ -130,7 +130,8 @@ class UserController {
 
   static async getUserProfile(req, res) {
     try {
-      const user = req.user; // Usuario autenticado almacenado en req.user
+      const user = req.user; 
+     
       if (!user) {
         return res.status(404).json({ message: 'Usuario no encontrado' });
       }
@@ -138,6 +139,7 @@ class UserController {
       res.json(user);
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener el perfil del usuario' });
+      console.log(error)
     }
   }
 

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 class Usuario {
   static async findById(id) {
     const [usuarios] = await pool.execute(
-      'SELECT id, nombre, apellido, nombre_usuario, correo, contraseña, imagen FROM usuario WHERE id = ?',
+      'SELECT id, nombre, apellido, bio, nombre_usuario, correo, contraseña, imagen FROM usuario WHERE id = ?',
       [id]
     )
     return usuarios[0]
@@ -12,13 +12,13 @@ class Usuario {
 
   static async findOne(columna, valor) {
     const [usuarios] = await pool.execute(
-      `SELECT id, nombre, apellido, nombre_usuario, correo, contraseña, imagen FROM usuario WHERE ${columna} = ?`,
+      `SELECT id, nombre, apellido, bio, nombre_usuario, correo, contraseña, imagen FROM usuario WHERE ${columna} = ?`,
       [valor]
     )
     return usuarios[0]
   }
 
-  static async update({ id, nombre, apellido, nombre_usuario, correo, contraseña, imagen }) {
+  static async update({ id, nombre, apellido, bio, nombre_usuario, correo, contraseña, imagen }) {
     let query = 'UPDATE usuario SET '
     const camposActualizar = []
     const valoresActualizar = []
@@ -31,6 +31,11 @@ class Usuario {
     if (apellido) {
       camposActualizar.push('apellido = ?')
       valoresActualizar.push(apellido)
+    }
+
+    if (bio) {
+      camposActualizar.push('bio = ?')
+      valoresActualizar.push(bio)
     }
 
     if (nombre_usuario) {
@@ -66,11 +71,11 @@ class Usuario {
   static async all() {
     try {
       const [usuarios] = await pool.execute(
-        'SELECT id, nombre, apellido, nombre_usuario, correo, imagen FROM usuario'
-      );
-      return usuarios;
+        'SELECT id, nombre, apellido, bio, nombre_usuario, correo, imagen FROM usuario'
+      )
+      return usuarios
     } catch (error) {
-      throw new Error('Error al obtener todos los usuarios');
+      throw new Error('Error al obtener todos los usuarios')
     }
   }
 
@@ -79,26 +84,26 @@ class Usuario {
       const [resultado] = await pool.execute(
         'DELETE FROM usuario WHERE id = ?',
         [id]
-      );
-      return resultado;
+      )
+      return resultado
     } catch (error) {
-      throw new Error('Error al eliminar el usuario: ' + error.message);
+      throw new Error('Error al eliminar el usuario: ' + error.message)
     }
   }
+
   static async create(data) {
-    const { correo, contraseña } = data;
+    const { correo, contraseña } = data
 
     if (!correo || !contraseña) {
-      throw new Error('Correo or contraseña is missing');
+      throw new Error('Correo or contraseña is missing')
     }
 
     const [result] = await pool.execute(
       'INSERT INTO usuario (correo, contraseña) VALUES (?, ?)',
       [correo, contraseña]
-    );
-    return { id: result.insertId, correo, contraseña };
+    )
+    return { id: result.insertId, correo, contraseña }
   }
-
 }
 
 export default Usuario
